@@ -15,6 +15,13 @@
       "when": 1790195807620,
       "tag": "0001_demo_data_seed_function",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1790195846289,
+      "tag": "0002_documents_storage_policies",
+      "breakpoints": true
     }
   ]
 }
