@@ -1055,6 +1055,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      clear_demo_data: { Args: never; Returns: undefined }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -1066,6 +1067,7 @@ export type Database = {
       my_tenant_id: { Args: never; Returns: string }
       recalc_charge: { Args: { _charge_id: string }; Returns: undefined }
       refresh_overdue: { Args: never; Returns: undefined }
+      seed_demo_data: { Args: never; Returns: undefined }
     }
     Enums: {
       app_role: "admin" | "manager" | "tenant"

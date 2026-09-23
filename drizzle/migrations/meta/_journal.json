@@ -8,6 +8,13 @@
       "when": 1790195761683,
       "tag": "0000_nyumbapro_core_schema",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1790195807620,
+      "tag": "0001_demo_data_seed_function",
+      "breakpoints": true
     }
   ]
 }
