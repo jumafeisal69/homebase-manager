@@ -73,9 +73,8 @@ export function useCurrentUser() {
 
       if (roleList.length === 0) {
         // First sign-in: landlords self-register, tenants are linked by their landlord.
-        const claimed: AppRole = tenant ? "tenant" : "manager";
-        await db.from("user_roles").insert({ user_id: id, role: claimed });
         role = tenant ? "tenant" : "admin";
+        await db.from("user_roles").insert({ user_id: id, role });
       }
 
       return {
