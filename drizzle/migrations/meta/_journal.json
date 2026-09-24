@@ -22,6 +22,13 @@
       "when": 1790195846289,
       "tag": "0002_documents_storage_policies",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1790219840114,
+      "tag": "0003_allow_role_self_claim",
+      "breakpoints": true
     }
   ]
 }
