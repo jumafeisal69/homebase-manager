@@ -17,6 +17,7 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthenticatedBuildingsRouteImport } from './routes/_authenticated/buildings'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedPropertiesRouteImport } from './routes/_authenticated/properties'
+import { Route as AuthenticatedRoomsRouteImport } from './routes/_authenticated/rooms'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -57,6 +58,11 @@ const AuthenticatedPropertiesRoute = AuthenticatedPropertiesRouteImport.update({
   path: '/properties',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedRoomsRoute = AuthenticatedRoomsRouteImport.update({
+  id: '/rooms',
+  path: '/rooms',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -66,6 +72,7 @@ export interface FileRoutesByFullPath {
   '/buildings': typeof AuthenticatedBuildingsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/properties': typeof AuthenticatedPropertiesRoute
+  '/rooms': typeof AuthenticatedRoomsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -75,6 +82,7 @@ export interface FileRoutesByTo {
   '/buildings': typeof AuthenticatedBuildingsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/properties': typeof AuthenticatedPropertiesRoute
+  '/rooms': typeof AuthenticatedRoomsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -86,6 +94,7 @@ export interface FileRoutesById {
   '/_authenticated/buildings': typeof AuthenticatedBuildingsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/properties': typeof AuthenticatedPropertiesRoute
+  '/_authenticated/rooms': typeof AuthenticatedRoomsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -97,6 +106,7 @@ export interface FileRouteTypes {
     | '/buildings'
     | '/dashboard'
     | '/properties'
+    | '/rooms'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -106,6 +116,7 @@ export interface FileRouteTypes {
     | '/buildings'
     | '/dashboard'
     | '/properties'
+    | '/rooms'
   id:
     | '__root__'
     | '/'
@@ -116,6 +127,7 @@ export interface FileRouteTypes {
     | '/_authenticated/buildings'
     | '/_authenticated/dashboard'
     | '/_authenticated/properties'
+    | '/_authenticated/rooms'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -184,6 +196,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPropertiesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/rooms': {
+      id: '/_authenticated/rooms'
+      path: '/rooms'
+      fullPath: '/rooms'
+      preLoaderRoute: typeof AuthenticatedRoomsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
@@ -191,12 +210,14 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedBuildingsRoute: typeof AuthenticatedBuildingsRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedPropertiesRoute: typeof AuthenticatedPropertiesRoute
+  AuthenticatedRoomsRoute: typeof AuthenticatedRoomsRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedBuildingsRoute: AuthenticatedBuildingsRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedPropertiesRoute: AuthenticatedPropertiesRoute,
+  AuthenticatedRoomsRoute: AuthenticatedRoomsRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
