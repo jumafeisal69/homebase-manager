@@ -3,7 +3,7 @@ import { ArrowLeft, Download } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
-import { ConfirmDialog, FormDialog } from "@/components/app/FormDialog";
+import { FormDialog } from "@/components/app/FormDialog";
 import { EmptyState, Field, LoadingRows, PageHeader, Panel, StatCard, StatusPill } from "@/components/app/Primitives";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -311,8 +311,6 @@ function TenantProfile() {
           <Textarea rows={3} value={moveForm.move_out_notes} onChange={(e) => setMoveForm({ ...moveForm, move_out_notes: e.target.value })} />
         </Field>
       </FormDialog>
-
-      <ConfirmDialog open={false} onOpenChange={() => {}} title="" description="" onConfirm={() => {}} />
     </>
   );
 }
