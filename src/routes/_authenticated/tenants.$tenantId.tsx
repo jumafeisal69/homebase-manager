@@ -311,8 +311,6 @@ function TenantProfile() {
           <Textarea rows={3} value={moveForm.move_out_notes} onChange={(e) => setMoveForm({ ...moveForm, move_out_notes: e.target.value })} />
         </Field>
       </FormDialog>
-
-      <ConfirmDialog open={false} onOpenChange={() => {}} title="" description="" onConfirm={() => {}} />
     </>
   );
 }
