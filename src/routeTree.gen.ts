@@ -16,9 +16,11 @@ import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthenticatedBuildingsRouteImport } from './routes/_authenticated/buildings'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedElectricityRouteImport } from './routes/_authenticated/electricity'
 import { Route as AuthenticatedPropertiesRouteImport } from './routes/_authenticated/properties'
 import { Route as AuthenticatedRentRouteImport } from './routes/_authenticated/rent'
 import { Route as AuthenticatedRoomsRouteImport } from './routes/_authenticated/rooms'
+import { Route as AuthenticatedWaterRouteImport } from './routes/_authenticated/water'
 import { Route as AuthenticatedTenantsIndexRouteImport } from './routes/_authenticated/tenants.index'
 import { Route as AuthenticatedTenantsTenantIdRouteImport } from './routes/_authenticated/tenants.$tenantId'
 
@@ -56,6 +58,12 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedElectricityRoute =
+  AuthenticatedElectricityRouteImport.update({
+    id: '/electricity',
+    path: '/electricity',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedPropertiesRoute = AuthenticatedPropertiesRouteImport.update({
   id: '/properties',
   path: '/properties',
@@ -69,6 +77,11 @@ const AuthenticatedRentRoute = AuthenticatedRentRouteImport.update({
 const AuthenticatedRoomsRoute = AuthenticatedRoomsRouteImport.update({
   id: '/rooms',
   path: '/rooms',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedWaterRoute = AuthenticatedWaterRouteImport.update({
+  id: '/water',
+  path: '/water',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedTenantsIndexRoute =
@@ -91,9 +104,11 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/buildings': typeof AuthenticatedBuildingsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/electricity': typeof AuthenticatedElectricityRoute
   '/properties': typeof AuthenticatedPropertiesRoute
   '/rent': typeof AuthenticatedRentRoute
   '/rooms': typeof AuthenticatedRoomsRoute
+  '/water': typeof AuthenticatedWaterRoute
   '/tenants/$tenantId': typeof AuthenticatedTenantsTenantIdRoute
   '/tenants/': typeof AuthenticatedTenantsIndexRoute
 }
@@ -104,9 +119,11 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/buildings': typeof AuthenticatedBuildingsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/electricity': typeof AuthenticatedElectricityRoute
   '/properties': typeof AuthenticatedPropertiesRoute
   '/rent': typeof AuthenticatedRentRoute
   '/rooms': typeof AuthenticatedRoomsRoute
+  '/water': typeof AuthenticatedWaterRoute
   '/tenants/$tenantId': typeof AuthenticatedTenantsTenantIdRoute
   '/tenants': typeof AuthenticatedTenantsIndexRoute
 }
@@ -119,9 +136,11 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/buildings': typeof AuthenticatedBuildingsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/electricity': typeof AuthenticatedElectricityRoute
   '/_authenticated/properties': typeof AuthenticatedPropertiesRoute
   '/_authenticated/rent': typeof AuthenticatedRentRoute
   '/_authenticated/rooms': typeof AuthenticatedRoomsRoute
+  '/_authenticated/water': typeof AuthenticatedWaterRoute
   '/_authenticated/tenants/$tenantId': typeof AuthenticatedTenantsTenantIdRoute
   '/_authenticated/tenants/': typeof AuthenticatedTenantsIndexRoute
 }
@@ -134,9 +153,11 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/buildings'
     | '/dashboard'
+    | '/electricity'
     | '/properties'
     | '/rent'
     | '/rooms'
+    | '/water'
     | '/tenants/$tenantId'
     | '/tenants/'
   fileRoutesByTo: FileRoutesByTo
@@ -147,9 +168,11 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/buildings'
     | '/dashboard'
+    | '/electricity'
     | '/properties'
     | '/rent'
     | '/rooms'
+    | '/water'
     | '/tenants/$tenantId'
     | '/tenants'
   id:
@@ -161,9 +184,11 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/_authenticated/buildings'
     | '/_authenticated/dashboard'
+    | '/_authenticated/electricity'
     | '/_authenticated/properties'
     | '/_authenticated/rent'
     | '/_authenticated/rooms'
+    | '/_authenticated/water'
     | '/_authenticated/tenants/$tenantId'
     | '/_authenticated/tenants/'
   fileRoutesById: FileRoutesById
@@ -227,6 +252,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/electricity': {
+      id: '/_authenticated/electricity'
+      path: '/electricity'
+      fullPath: '/electricity'
+      preLoaderRoute: typeof AuthenticatedElectricityRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/properties': {
       id: '/_authenticated/properties'
       path: '/properties'
@@ -246,6 +278,13 @@ declare module '@tanstack/react-router' {
       path: '/rooms'
       fullPath: '/rooms'
       preLoaderRoute: typeof AuthenticatedRoomsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/water': {
+      id: '/_authenticated/water'
+      path: '/water'
+      fullPath: '/water'
+      preLoaderRoute: typeof AuthenticatedWaterRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/tenants/': {
@@ -268,9 +307,11 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedBuildingsRoute: typeof AuthenticatedBuildingsRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedElectricityRoute: typeof AuthenticatedElectricityRoute
   AuthenticatedPropertiesRoute: typeof AuthenticatedPropertiesRoute
   AuthenticatedRentRoute: typeof AuthenticatedRentRoute
   AuthenticatedRoomsRoute: typeof AuthenticatedRoomsRoute
+  AuthenticatedWaterRoute: typeof AuthenticatedWaterRoute
   AuthenticatedTenantsTenantIdRoute: typeof AuthenticatedTenantsTenantIdRoute
   AuthenticatedTenantsIndexRoute: typeof AuthenticatedTenantsIndexRoute
 }
@@ -278,9 +319,11 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedBuildingsRoute: AuthenticatedBuildingsRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedElectricityRoute: AuthenticatedElectricityRoute,
   AuthenticatedPropertiesRoute: AuthenticatedPropertiesRoute,
   AuthenticatedRentRoute: AuthenticatedRentRoute,
   AuthenticatedRoomsRoute: AuthenticatedRoomsRoute,
+  AuthenticatedWaterRoute: AuthenticatedWaterRoute,
   AuthenticatedTenantsTenantIdRoute: AuthenticatedTenantsTenantIdRoute,
   AuthenticatedTenantsIndexRoute: AuthenticatedTenantsIndexRoute,
 }
