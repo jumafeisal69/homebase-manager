@@ -16,7 +16,7 @@ export function useBuildings(propertyId?: string) {
   });
 }
 
-export function useRoomsList(filters: { propertyId?: string; buildingId?: string } = {}) {
+export function useRoomsList(filters: { propertyId?: string | undefined; buildingId?: string | undefined } = {}) {
   return useRows<Room>("rooms", {
     select: "*, buildings(name), properties(name)",
     filters: [
