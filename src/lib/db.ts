@@ -97,7 +97,7 @@ export function friendly(message: string): string {
 export function useSave(table: string, label = "Record") {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (values: Record<string, unknown> & { id?: string }) => {
+    mutationFn: async (values: Record<string, unknown> & { id?: string | undefined }) => {
       const { id, ...rest } = values;
       if (id) {
         const { data, error } = await db.from(table).update(rest).eq("id", id).select().maybeSingle();
