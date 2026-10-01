@@ -15,8 +15,10 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthenticatedBuildingsRouteImport } from './routes/_authenticated/buildings'
+import { Route as AuthenticatedContractsRouteImport } from './routes/_authenticated/contracts'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedElectricityRouteImport } from './routes/_authenticated/electricity'
+import { Route as AuthenticatedMaintenanceRouteImport } from './routes/_authenticated/maintenance'
 import { Route as AuthenticatedPropertiesRouteImport } from './routes/_authenticated/properties'
 import { Route as AuthenticatedRentRouteImport } from './routes/_authenticated/rent'
 import { Route as AuthenticatedRoomsRouteImport } from './routes/_authenticated/rooms'
@@ -53,6 +55,11 @@ const AuthenticatedBuildingsRoute = AuthenticatedBuildingsRouteImport.update({
   path: '/buildings',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedContractsRoute = AuthenticatedContractsRouteImport.update({
+  id: '/contracts',
+  path: '/contracts',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -62,6 +69,12 @@ const AuthenticatedElectricityRoute =
   AuthenticatedElectricityRouteImport.update({
     id: '/electricity',
     path: '/electricity',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedMaintenanceRoute =
+  AuthenticatedMaintenanceRouteImport.update({
+    id: '/maintenance',
+    path: '/maintenance',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedPropertiesRoute = AuthenticatedPropertiesRouteImport.update({
@@ -103,8 +116,10 @@ export interface FileRoutesByFullPath {
   '/forgot-password': typeof ForgotPasswordRoute
   '/reset-password': typeof ResetPasswordRoute
   '/buildings': typeof AuthenticatedBuildingsRoute
+  '/contracts': typeof AuthenticatedContractsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/electricity': typeof AuthenticatedElectricityRoute
+  '/maintenance': typeof AuthenticatedMaintenanceRoute
   '/properties': typeof AuthenticatedPropertiesRoute
   '/rent': typeof AuthenticatedRentRoute
   '/rooms': typeof AuthenticatedRoomsRoute
@@ -118,8 +133,10 @@ export interface FileRoutesByTo {
   '/forgot-password': typeof ForgotPasswordRoute
   '/reset-password': typeof ResetPasswordRoute
   '/buildings': typeof AuthenticatedBuildingsRoute
+  '/contracts': typeof AuthenticatedContractsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/electricity': typeof AuthenticatedElectricityRoute
+  '/maintenance': typeof AuthenticatedMaintenanceRoute
   '/properties': typeof AuthenticatedPropertiesRoute
   '/rent': typeof AuthenticatedRentRoute
   '/rooms': typeof AuthenticatedRoomsRoute
@@ -135,8 +152,10 @@ export interface FileRoutesById {
   '/forgot-password': typeof ForgotPasswordRoute
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/buildings': typeof AuthenticatedBuildingsRoute
+  '/_authenticated/contracts': typeof AuthenticatedContractsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/electricity': typeof AuthenticatedElectricityRoute
+  '/_authenticated/maintenance': typeof AuthenticatedMaintenanceRoute
   '/_authenticated/properties': typeof AuthenticatedPropertiesRoute
   '/_authenticated/rent': typeof AuthenticatedRentRoute
   '/_authenticated/rooms': typeof AuthenticatedRoomsRoute
@@ -152,8 +171,10 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/reset-password'
     | '/buildings'
+    | '/contracts'
     | '/dashboard'
     | '/electricity'
+    | '/maintenance'
     | '/properties'
     | '/rent'
     | '/rooms'
@@ -167,8 +188,10 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/reset-password'
     | '/buildings'
+    | '/contracts'
     | '/dashboard'
     | '/electricity'
+    | '/maintenance'
     | '/properties'
     | '/rent'
     | '/rooms'
@@ -183,8 +206,10 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/reset-password'
     | '/_authenticated/buildings'
+    | '/_authenticated/contracts'
     | '/_authenticated/dashboard'
     | '/_authenticated/electricity'
+    | '/_authenticated/maintenance'
     | '/_authenticated/properties'
     | '/_authenticated/rent'
     | '/_authenticated/rooms'
@@ -245,6 +270,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedBuildingsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/contracts': {
+      id: '/_authenticated/contracts'
+      path: '/contracts'
+      fullPath: '/contracts'
+      preLoaderRoute: typeof AuthenticatedContractsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -257,6 +289,13 @@ declare module '@tanstack/react-router' {
       path: '/electricity'
       fullPath: '/electricity'
       preLoaderRoute: typeof AuthenticatedElectricityRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/maintenance': {
+      id: '/_authenticated/maintenance'
+      path: '/maintenance'
+      fullPath: '/maintenance'
+      preLoaderRoute: typeof AuthenticatedMaintenanceRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/properties': {
@@ -306,8 +345,10 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedBuildingsRoute: typeof AuthenticatedBuildingsRoute
+  AuthenticatedContractsRoute: typeof AuthenticatedContractsRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedElectricityRoute: typeof AuthenticatedElectricityRoute
+  AuthenticatedMaintenanceRoute: typeof AuthenticatedMaintenanceRoute
   AuthenticatedPropertiesRoute: typeof AuthenticatedPropertiesRoute
   AuthenticatedRentRoute: typeof AuthenticatedRentRoute
   AuthenticatedRoomsRoute: typeof AuthenticatedRoomsRoute
@@ -318,8 +359,10 @@ interface AuthenticatedRouteRouteChildren {
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedBuildingsRoute: AuthenticatedBuildingsRoute,
+  AuthenticatedContractsRoute: AuthenticatedContractsRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedElectricityRoute: AuthenticatedElectricityRoute,
+  AuthenticatedMaintenanceRoute: AuthenticatedMaintenanceRoute,
   AuthenticatedPropertiesRoute: AuthenticatedPropertiesRoute,
   AuthenticatedRentRoute: AuthenticatedRentRoute,
   AuthenticatedRoomsRoute: AuthenticatedRoomsRoute,
