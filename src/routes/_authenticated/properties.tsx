@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useProperties } from "@/hooks/useLookups";
-import { logAudit, useRows, useSave } from "@/lib/db";
+import { logAudit, useRemove, useRows, useSave } from "@/lib/db";
 import { formatDate } from "@/lib/format";
 import type { Building, Property } from "@/lib/types";
 
@@ -38,6 +38,8 @@ function PropertiesPage() {
   const [editing, setEditing] = useState<Property | null>(null);
   const [form, setForm] = useState({ ...blank });
   const [archiving, setArchiving] = useState<Property | null>(null);
+  const [deleting, setDeleting] = useState<Property | null>(null);
+  const remove = useRemove("properties", "Property");
 
   function openNew() {
     setEditing(null);
@@ -107,6 +109,9 @@ function PropertiesPage() {
           </Button>
           <Button size="sm" variant="ghost" className="text-destructive" onClick={() => setArchiving(r)}>
             Archive
+          </Button>
+          <Button size="sm" variant="ghost" className="text-destructive" onClick={() => setDeleting(r)}>
+            Delete
           </Button>
         </div>
       ),
@@ -204,6 +209,24 @@ function PropertiesPage() {
               },
             },
           );
+        }}
+      />
+
+      <ConfirmDialog
+        open={Boolean(deleting)}
+        onOpenChange={(v) => !v && setDeleting(null)}
+        title="Delete this property permanently?"
+        description={`"${deleting?.name ?? ""}" and all its buildings, rooms, tenant assignments, rent, utility and maintenance records will be deleted. This cannot be undone.`}
+        confirmLabel="Delete"
+        onConfirm={() => {
+          if (!deleting) return;
+          const target = deleting;
+          remove.mutate(target.id, {
+            onSuccess: () => {
+              void logAudit("delete", "property", `Deleted "${target.name}"`, target.id);
+              setDeleting(null);
+            },
+          });
         }}
       />
     </>
