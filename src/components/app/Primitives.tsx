@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useT } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 export function PageHeader({
@@ -14,10 +15,11 @@ export function PageHeader({
   subtitle?: string;
   actions?: ReactNode;
 }) {
+  const t = useT();
   return (
     <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
       <div>
-        <h1 className="text-2xl font-bold sm:text-3xl">{title}</h1>
+        <h1 className="text-2xl font-bold sm:text-3xl">{t(title)}</h1>
         {subtitle && <p className="mt-1 max-w-[52ch] text-pretty text-[13px] text-muted-foreground">{subtitle}</p>}
       </div>
       {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
@@ -41,14 +43,15 @@ export function StatCard({
 }: {
   label: string;
   value: ReactNode;
-  hint?: string;
+  hint?: string | undefined;
   tone?: keyof typeof washes;
 }) {
+  const t = useT();
   return (
     <div className="relative overflow-hidden rounded-xl bg-card p-5 ring-1 ring-border">
       <div className={cn("skew-wash bg-gradient-to-r to-transparent", washes[tone])} />
       <div className="relative">
-        <div className="text-[11px] uppercase tracking-wider text-muted-foreground">{label}</div>
+        <div className="text-[11px] uppercase tracking-wider text-muted-foreground">{t(label)}</div>
         <div className="ledger-num mt-2 font-display text-xl font-semibold sm:text-2xl">{value}</div>
         {hint && <div className="mt-1 text-[11px] text-muted-foreground">{hint}</div>}
       </div>
@@ -67,11 +70,12 @@ export function Panel({
   children: ReactNode;
   className?: string;
 }) {
+  const t = useT();
   return (
     <section className={cn("overflow-hidden rounded-xl bg-card ring-1 ring-border", className)}>
       {(title || action) && (
         <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border p-5">
-          {title && <h2 className="font-display text-[13px] font-medium">{title}</h2>}
+          {title && <h2 className="font-display text-[13px] font-medium">{t(title)}</h2>}
           {action}
         </div>
       )}
@@ -81,9 +85,10 @@ export function Panel({
 }
 
 export function EmptyState({ message, action }: { message: string; action?: ReactNode }) {
+  const t = useT();
   return (
     <div className="flex flex-col items-center gap-3 px-6 py-14 text-center">
-      <p className="text-[13px] text-muted-foreground">{message}</p>
+      <p className="text-[13px] text-muted-foreground">{t(message)}</p>
       {action}
     </div>
   );
@@ -99,7 +104,7 @@ export function LoadingRows({ rows = 4 }: { rows?: number }) {
   );
 }
 
-export function ErrorNote({ message, onRetry }: { message: string; onRetry?: () => void }) {
+export function ErrorNote({ message, onRetry }: { message: string; onRetry?: (() => void) | undefined }) {
   return (
     <div className="flex flex-col items-center gap-3 px-6 py-12 text-center">
       <p className="text-[13px] text-destructive">{message}</p>
@@ -156,12 +161,13 @@ export function Field({
 }: {
   label: string;
   children: ReactNode;
-  hint?: string;
-  className?: string;
+  hint?: string | undefined;
+  className?: string | undefined;
 }) {
+  const t = useT();
   return (
     <div className={cn("space-y-1.5", className)}>
-      <Label className="text-[12px] text-muted-foreground">{label}</Label>
+      <Label className="text-[12px] text-muted-foreground">{t(label)}</Label>
       {children}
       {hint && <p className="text-[11px] text-muted-foreground">{hint}</p>}
     </div>

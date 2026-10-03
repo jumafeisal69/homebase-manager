@@ -27,6 +27,10 @@ import { Route as AuthenticatedRoomsRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedUsersRouteImport } from './routes/_authenticated/users'
 import { Route as AuthenticatedWaterRouteImport } from './routes/_authenticated/water'
+import { Route as AuthenticatedPortalIndexRouteImport } from './routes/_authenticated/portal.index'
+import { Route as AuthenticatedPortalMaintenanceRouteImport } from './routes/_authenticated/portal.maintenance'
+import { Route as AuthenticatedPortalPaymentsRouteImport } from './routes/_authenticated/portal.payments'
+import { Route as AuthenticatedPortalUtilitiesRouteImport } from './routes/_authenticated/portal.utilities'
 import { Route as AuthenticatedTenantsIndexRouteImport } from './routes/_authenticated/tenants.index'
 import { Route as AuthenticatedTenantsTenantIdRouteImport } from './routes/_authenticated/tenants.$tenantId'
 
@@ -122,6 +126,30 @@ const AuthenticatedWaterRoute = AuthenticatedWaterRouteImport.update({
   path: '/water',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedPortalIndexRoute =
+  AuthenticatedPortalIndexRouteImport.update({
+    id: '/portal/',
+    path: '/portal/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedPortalMaintenanceRoute =
+  AuthenticatedPortalMaintenanceRouteImport.update({
+    id: '/portal/maintenance',
+    path: '/portal/maintenance',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedPortalPaymentsRoute =
+  AuthenticatedPortalPaymentsRouteImport.update({
+    id: '/portal/payments',
+    path: '/portal/payments',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedPortalUtilitiesRoute =
+  AuthenticatedPortalUtilitiesRouteImport.update({
+    id: '/portal/utilities',
+    path: '/portal/utilities',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedTenantsIndexRoute =
   AuthenticatedTenantsIndexRouteImport.update({
     id: '/tenants/',
@@ -153,7 +181,11 @@ export interface FileRoutesByFullPath {
   '/settings': typeof AuthenticatedSettingsRoute
   '/users': typeof AuthenticatedUsersRoute
   '/water': typeof AuthenticatedWaterRoute
+  '/portal/maintenance': typeof AuthenticatedPortalMaintenanceRoute
+  '/portal/payments': typeof AuthenticatedPortalPaymentsRoute
+  '/portal/utilities': typeof AuthenticatedPortalUtilitiesRoute
   '/tenants/$tenantId': typeof AuthenticatedTenantsTenantIdRoute
+  '/portal/': typeof AuthenticatedPortalIndexRoute
   '/tenants/': typeof AuthenticatedTenantsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -174,7 +206,11 @@ export interface FileRoutesByTo {
   '/settings': typeof AuthenticatedSettingsRoute
   '/users': typeof AuthenticatedUsersRoute
   '/water': typeof AuthenticatedWaterRoute
+  '/portal/maintenance': typeof AuthenticatedPortalMaintenanceRoute
+  '/portal/payments': typeof AuthenticatedPortalPaymentsRoute
+  '/portal/utilities': typeof AuthenticatedPortalUtilitiesRoute
   '/tenants/$tenantId': typeof AuthenticatedTenantsTenantIdRoute
+  '/portal': typeof AuthenticatedPortalIndexRoute
   '/tenants': typeof AuthenticatedTenantsIndexRoute
 }
 export interface FileRoutesById {
@@ -197,7 +233,11 @@ export interface FileRoutesById {
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/users': typeof AuthenticatedUsersRoute
   '/_authenticated/water': typeof AuthenticatedWaterRoute
+  '/_authenticated/portal/maintenance': typeof AuthenticatedPortalMaintenanceRoute
+  '/_authenticated/portal/payments': typeof AuthenticatedPortalPaymentsRoute
+  '/_authenticated/portal/utilities': typeof AuthenticatedPortalUtilitiesRoute
   '/_authenticated/tenants/$tenantId': typeof AuthenticatedTenantsTenantIdRoute
+  '/_authenticated/portal/': typeof AuthenticatedPortalIndexRoute
   '/_authenticated/tenants/': typeof AuthenticatedTenantsIndexRoute
 }
 export interface FileRouteTypes {
@@ -220,7 +260,11 @@ export interface FileRouteTypes {
     | '/settings'
     | '/users'
     | '/water'
+    | '/portal/maintenance'
+    | '/portal/payments'
+    | '/portal/utilities'
     | '/tenants/$tenantId'
+    | '/portal/'
     | '/tenants/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -241,7 +285,11 @@ export interface FileRouteTypes {
     | '/settings'
     | '/users'
     | '/water'
+    | '/portal/maintenance'
+    | '/portal/payments'
+    | '/portal/utilities'
     | '/tenants/$tenantId'
+    | '/portal'
     | '/tenants'
   id:
     | '__root__'
@@ -263,7 +311,11 @@ export interface FileRouteTypes {
     | '/_authenticated/settings'
     | '/_authenticated/users'
     | '/_authenticated/water'
+    | '/_authenticated/portal/maintenance'
+    | '/_authenticated/portal/payments'
+    | '/_authenticated/portal/utilities'
     | '/_authenticated/tenants/$tenantId'
+    | '/_authenticated/portal/'
     | '/_authenticated/tenants/'
   fileRoutesById: FileRoutesById
 }
@@ -403,6 +455,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedWaterRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/portal/': {
+      id: '/_authenticated/portal/'
+      path: '/portal'
+      fullPath: '/portal/'
+      preLoaderRoute: typeof AuthenticatedPortalIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/portal/maintenance': {
+      id: '/_authenticated/portal/maintenance'
+      path: '/portal/maintenance'
+      fullPath: '/portal/maintenance'
+      preLoaderRoute: typeof AuthenticatedPortalMaintenanceRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/portal/payments': {
+      id: '/_authenticated/portal/payments'
+      path: '/portal/payments'
+      fullPath: '/portal/payments'
+      preLoaderRoute: typeof AuthenticatedPortalPaymentsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/portal/utilities': {
+      id: '/_authenticated/portal/utilities'
+      path: '/portal/utilities'
+      fullPath: '/portal/utilities'
+      preLoaderRoute: typeof AuthenticatedPortalUtilitiesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/tenants/': {
       id: '/_authenticated/tenants/'
       path: '/tenants'
@@ -434,7 +514,11 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedUsersRoute: typeof AuthenticatedUsersRoute
   AuthenticatedWaterRoute: typeof AuthenticatedWaterRoute
+  AuthenticatedPortalMaintenanceRoute: typeof AuthenticatedPortalMaintenanceRoute
+  AuthenticatedPortalPaymentsRoute: typeof AuthenticatedPortalPaymentsRoute
+  AuthenticatedPortalUtilitiesRoute: typeof AuthenticatedPortalUtilitiesRoute
   AuthenticatedTenantsTenantIdRoute: typeof AuthenticatedTenantsTenantIdRoute
+  AuthenticatedPortalIndexRoute: typeof AuthenticatedPortalIndexRoute
   AuthenticatedTenantsIndexRoute: typeof AuthenticatedTenantsIndexRoute
 }
 
@@ -452,7 +536,11 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedUsersRoute: AuthenticatedUsersRoute,
   AuthenticatedWaterRoute: AuthenticatedWaterRoute,
+  AuthenticatedPortalMaintenanceRoute: AuthenticatedPortalMaintenanceRoute,
+  AuthenticatedPortalPaymentsRoute: AuthenticatedPortalPaymentsRoute,
+  AuthenticatedPortalUtilitiesRoute: AuthenticatedPortalUtilitiesRoute,
   AuthenticatedTenantsTenantIdRoute: AuthenticatedTenantsTenantIdRoute,
+  AuthenticatedPortalIndexRoute: AuthenticatedPortalIndexRoute,
   AuthenticatedTenantsIndexRoute: AuthenticatedTenantsIndexRoute,
 }
 

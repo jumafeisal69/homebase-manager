@@ -71,7 +71,7 @@ function SettingsPage() {
             className="space-y-4 p-5"
             onSubmit={(e) => {
               e.preventDefault();
-              if (!profile.full_name.trim()) return toast.error("Enter your name.");
+              if (!profile.full_name.trim()) return void toast.error("Enter your name.");
               void run("profile", () => db.from("profiles").update({ full_name: profile.full_name.trim(), phone: profile.phone || null }).eq("id", me!.id), "Profile saved");
             }}
           >
@@ -96,7 +96,7 @@ function SettingsPage() {
               className="space-y-4 p-5"
               onSubmit={(e) => {
                 e.preventDefault();
-                if (rules.default_due_day < 1 || rules.default_due_day > 28) return toast.error("Due day must be between 1 and 28.");
+                if (rules.default_due_day < 1 || rules.default_due_day > 28) return void toast.error("Due day must be between 1 and 28.");
                 void run(
                   "rules",
                   () => db.from("system_settings").upsert({ owner_id: me!.id, currency: "TZS", ...rules }, { onConflict: "owner_id" }),
@@ -140,7 +140,7 @@ function SettingsPage() {
             className="space-y-4 p-5"
             onSubmit={(e) => {
               e.preventDefault();
-              if (pw.next.length < 8) return toast.error("Use at least 8 characters for your new password.");
+              if (pw.next.length < 8) return void toast.error("Use at least 8 characters for your new password.");
               void run(
                 "pw",
                 async () => {
