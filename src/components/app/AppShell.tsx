@@ -27,6 +27,7 @@ import { useCurrentUser } from "@/hooks/useSession";
 import { supabase } from "@/integrations/supabase/client";
 import { useRows } from "@/lib/db";
 import { initials } from "@/lib/format";
+import { setLang, useLang, useT } from "@/lib/i18n";
 import type { AppNotification } from "@/lib/types";
 
 const landlordNav = [
@@ -59,6 +60,7 @@ function NavList({ onNavigate }: { onNavigate?: () => void }) {
   const { data: me } = useCurrentUser();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const items = me?.role === "tenant" ? tenantNav : landlordNav;
+  const t = useT();
 
   return (
     <nav className="flex flex-col gap-0.5 text-[13px]">
@@ -76,7 +78,7 @@ function NavList({ onNavigate }: { onNavigate?: () => void }) {
             }
           >
             <item.icon className="size-4 shrink-0" />
-            {item.label}
+            {t(item.label)}
           </Link>
         );
       })}
@@ -86,6 +88,7 @@ function NavList({ onNavigate }: { onNavigate?: () => void }) {
 
 function Identity() {
   const { data: me } = useCurrentUser();
+  const t = useT();
   return (
     <div className="mt-auto flex items-center gap-2.5 rounded-xl bg-secondary/60 p-3 ring-1 ring-border">
       <div className="grid size-9 shrink-0 place-items-center rounded-full bg-accent font-display text-sm font-bold text-accent-foreground">
@@ -94,7 +97,7 @@ function Identity() {
       <div className="min-w-0 leading-tight">
         <div className="truncate font-display text-[13px] font-medium">{me?.fullName ?? "…"}</div>
         <div className="text-[11px] capitalize text-muted-foreground">
-          {me?.role === "tenant" ? "Tenant" : me?.role === "manager" ? "Property manager" : "Landlord"}
+          {t(me?.role === "tenant" ? "Tenant" : me?.role === "manager" ? "Property manager" : "Landlord")}
         </div>
       </div>
     </div>
@@ -158,6 +161,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             <GlobalSearch />
 
             <div className="ml-auto flex items-center gap-2">
+              <LanguageSwitch />
               <Link to="/notifications" className="relative" aria-label="Notifications">
                 <Button variant="ghost" size="icon">
                   <Bell className="size-[18px]" />
@@ -175,6 +179,25 @@ export function AppShell({ children }: { children: ReactNode }) {
           <div className="p-4 sm:p-6 lg:p-8">{children}</div>
         </main>
       </div>
+    </div>
+  );
+}
+
+function LanguageSwitch() {
+  const lang = useLang();
+  return (
+    <div className="flex rounded-md bg-secondary p-0.5 text-[11px] font-medium ring-1 ring-border" role="group" aria-label="Language">
+      {(["en", "sw"] as const).map((l) => (
+        <button
+          key={l}
+          type="button"
+          onClick={() => setLang(l)}
+          aria-pressed={lang === l}
+          className={lang === l ? "rounded px-2 py-1 bg-primary text-primary-foreground" : "rounded px-2 py-1 text-muted-foreground hover:text-foreground"}
+        >
+          {l === "en" ? "EN" : "SW"}
+        </button>
+      ))}
     </div>
   );
 }
