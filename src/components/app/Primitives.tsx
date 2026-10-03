@@ -43,7 +43,7 @@ export function StatCard({
 }: {
   label: string;
   value: ReactNode;
-  hint?: string;
+  hint?: string | undefined;
   tone?: keyof typeof washes;
 }) {
   const t = useT();
