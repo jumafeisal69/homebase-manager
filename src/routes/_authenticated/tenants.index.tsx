@@ -66,6 +66,38 @@ function TenantsPage() {
   const [archiving, setArchiving] = useState<Tenant | null>(null);
   const [assignOpen, setAssignOpen] = useState(false);
   const [assign, setAssign] = useState({ ...assignBlank });
+  const [loginTenant, setLoginTenant] = useState<Tenant | null>(null);
+  const [loginForm, setLoginForm] = useState({ email: "", password: "" });
+  const [loginSaving, setLoginSaving] = useState(false);
+
+  function openLogin(tenant: Tenant) {
+    setLoginTenant(tenant);
+    setLoginForm({ email: tenant.email ?? "", password: "" });
+  }
+
+  async function submitLogin() {
+    if (!loginTenant) return;
+    if (!loginForm.email.includes("@")) {
+      toast.error("Enter a valid email address for the tenant.");
+      return;
+    }
+    if (loginForm.password.length < 8) {
+      toast.error("Password must be at least 8 characters.");
+      return;
+    }
+    setLoginSaving(true);
+    try {
+      await createTenantAccount({ data: { tenantId: loginTenant.id, email: loginForm.email.trim(), password: loginForm.password } });
+      toast.success(`Login created for ${loginTenant.full_name}. Share the email and password with them.`);
+      setLoginTenant(null);
+      void logAudit("create", "tenant_account", `Created portal login for ${loginTenant.full_name}`, loginTenant.id);
+      void refetch();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Could not create the login.");
+    } finally {
+      setLoginSaving(false);
+    }
+  }
 
   function openNew() {
     setEditing(null);
