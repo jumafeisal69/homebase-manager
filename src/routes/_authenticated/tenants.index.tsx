@@ -33,6 +33,11 @@ const blank = {
   property_id: "",
   date_joined: today(),
   status: "active",
+  // Optional room assignment (only used when adding a new tenant)
+  room_id: "",
+  move_in_date: today(),
+  monthly_rent: "",
+  deposit: "",
 };
 
 const assignBlank = {
@@ -120,6 +125,10 @@ function TenantsPage() {
       property_id: row.property_id ?? "",
       date_joined: row.date_joined,
       status: row.status,
+      room_id: "",
+      move_in_date: today(),
+      monthly_rent: "",
+      deposit: "",
     });
     setOpen(true);
   }
@@ -133,17 +142,52 @@ function TenantsPage() {
       toast.error("That email address doesn't look right.");
       return;
     }
+    const room = !editing && form.room_id ? rooms.find((r) => r.id === form.room_id) : undefined;
+    if (!editing && form.room_id && !room) {
+      toast.error("Choose a room for this tenant.");
+      return;
+    }
     const payload: Record<string, unknown> = {
-      ...form,
-      property_id: form.property_id || null,
-      date_of_birth: form.date_of_birth || null,
+      full_name: form.full_name,
+      phone: form.phone,
+      email: form.email,
+      national_id: form.national_id,
       gender: form.gender || null,
+      date_of_birth: form.date_of_birth || null,
+      emergency_contact: form.emergency_contact,
+      emergency_phone: form.emergency_phone,
+      address: form.address,
+      property_id: form.property_id || null,
+      date_joined: form.date_joined,
+      status: form.status,
       id: editing?.id,
     };
     saveTenant.mutate(payload, {
       onSuccess: (row) => {
+        const saved = row as Tenant | null;
+        void logAudit(editing ? "update" : "create", "tenant", `Tenant ${form.full_name}`, saved?.id);
+        if (room && saved?.id) {
+          const rent = Number(form.monthly_rent || room.monthly_rent);
+          saveAssignment.mutate(
+            {
+              tenant_id: saved.id,
+              property_id: room.property_id,
+              room_id: room.id,
+              move_in_date: form.move_in_date,
+              monthly_rent: rent,
+              deposit: Number(form.deposit || room.deposit_amount || 0),
+              is_active: true,
+            },
+            {
+              onSuccess: () => {
+                setOpen(false);
+                void logAudit("assign", "tenant_assignment", `Assigned room ${room.room_number}`, saved.id);
+              },
+            },
+          );
+          return;
+        }
         setOpen(false);
-        void logAudit(editing ? "update" : "create", "tenant", `Tenant ${form.full_name}`, (row as Tenant | null)?.id);
       },
     });
   }
@@ -352,6 +396,47 @@ function TenantsPage() {
           <Field label="Home address" className="sm:col-span-2">
             <Textarea value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} rows={2} />
           </Field>
+          {!editing && (
+            <>
+              <div className="sm:col-span-2 border-t border-border pt-4 text-sm font-medium">Room assignment (optional)</div>
+              <Field label="Room" hint="Only rooms that aren't occupied are listed.">
+                <Select
+                  value={form.room_id}
+                  onValueChange={(v) => {
+                    const room = rooms.find((r) => r.id === v);
+                    setForm({
+                      ...form,
+                      room_id: v,
+                      monthly_rent: room ? String(room.monthly_rent) : form.monthly_rent,
+                      deposit: room ? String(room.deposit_amount) : form.deposit,
+                    });
+                  }}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="No room yet" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {rooms
+                      .filter((r) => (!form.property_id || r.property_id === form.property_id) && r.status !== "occupied")
+                      .map((r) => (
+                        <SelectItem key={r.id} value={r.id}>
+                          {r.buildings?.name} · {r.room_number}
+                        </SelectItem>
+                      ))}
+                  </SelectContent>
+                </Select>
+              </Field>
+              <Field label="Move-in date">
+                <Input type="date" value={form.move_in_date} onChange={(e) => setForm({ ...form, move_in_date: e.target.value })} />
+              </Field>
+              <Field label="Monthly rent (TZS)">
+                <Input type="number" min={0} value={form.monthly_rent} onChange={(e) => setForm({ ...form, monthly_rent: e.target.value })} />
+              </Field>
+              <Field label="Deposit (TZS)">
+                <Input type="number" min={0} value={form.deposit} onChange={(e) => setForm({ ...form, deposit: e.target.value })} />
+              </Field>
+            </>
+          )}
         </div>
       </FormDialog>
 
