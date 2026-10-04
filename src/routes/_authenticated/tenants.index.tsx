@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { useProperties, useRoomsList, useTenantsList } from "@/hooks/useLookups";
 import { logAudit, useRows, useSave } from "@/lib/db";
+import { createTenantAccount } from "@/lib/tenants.functions";
 import { formatDate, formatPhone, today } from "@/lib/format";
 import type { Assignment, Tenant } from "@/lib/types";
 
@@ -65,6 +66,38 @@ function TenantsPage() {
   const [archiving, setArchiving] = useState<Tenant | null>(null);
   const [assignOpen, setAssignOpen] = useState(false);
   const [assign, setAssign] = useState({ ...assignBlank });
+  const [loginTenant, setLoginTenant] = useState<Tenant | null>(null);
+  const [loginForm, setLoginForm] = useState({ email: "", password: "" });
+  const [loginSaving, setLoginSaving] = useState(false);
+
+  function openLogin(tenant: Tenant) {
+    setLoginTenant(tenant);
+    setLoginForm({ email: tenant.email ?? "", password: "" });
+  }
+
+  async function submitLogin() {
+    if (!loginTenant) return;
+    if (!loginForm.email.includes("@")) {
+      toast.error("Enter a valid email address for the tenant.");
+      return;
+    }
+    if (loginForm.password.length < 8) {
+      toast.error("Password must be at least 8 characters.");
+      return;
+    }
+    setLoginSaving(true);
+    try {
+      await createTenantAccount({ data: { tenantId: loginTenant.id, email: loginForm.email.trim(), password: loginForm.password } });
+      toast.success(`Login created for ${loginTenant.full_name}. Share the email and password with them.`);
+      setLoginTenant(null);
+      void logAudit("create", "tenant_account", `Created portal login for ${loginTenant.full_name}`, loginTenant.id);
+      void refetch();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Could not create the login.");
+    } finally {
+      setLoginSaving(false);
+    }
+  }
 
   function openNew() {
     setEditing(null);
@@ -189,6 +222,18 @@ function TenantsPage() {
           {!roomOf(r.id) && (
             <Button size="sm" variant="ghost" onClick={() => openAssign(r)}>
               Assign room
+            </Button>
+          )}
+          {!r.user_id && (
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={(e) => {
+                e.stopPropagation();
+                openLogin(r);
+              }}
+            >
+              Create login
             </Button>
           )}
           <Button size="sm" variant="ghost" onClick={() => openEdit(r)}>
@@ -375,6 +420,26 @@ function TenantsPage() {
           </Field>
           <Field label="Starting water reading">
             <Input value={assign.start_meter_water} onChange={(e) => setAssign({ ...assign, start_meter_water: e.target.value })} />
+          </Field>
+        </div>
+      </FormDialog>
+
+      <FormDialog
+        open={Boolean(loginTenant)}
+        onOpenChange={(v) => !v && setLoginTenant(null)}
+        title={`Create login for ${loginTenant?.full_name ?? "tenant"}`}
+        description="The tenant uses this email and password to sign in to their portal. Share them privately."
+        onSubmit={() => void submitLogin()}
+        saving={loginSaving}
+        savingLabel="Creating login…"
+        submitLabel="Create login"
+      >
+        <div className="grid gap-4">
+          <Field label="Email">
+            <Input type="email" value={loginForm.email} onChange={(e) => setLoginForm({ ...loginForm, email: e.target.value })} placeholder="tenant@example.com" />
+          </Field>
+          <Field label="Password" hint="At least 8 characters. The tenant can change it after signing in.">
+            <Input type="text" value={loginForm.password} onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })} placeholder="Choose a password" />
           </Field>
         </div>
       </FormDialog>
