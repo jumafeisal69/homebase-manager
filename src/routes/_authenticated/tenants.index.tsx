@@ -224,6 +224,11 @@ function TenantsPage() {
               Assign room
             </Button>
           )}
+          {!r.user_id && (
+            <Button size="sm" variant="ghost" onClick={() => openLogin(r)}>
+              Create login
+            </Button>
+          )}
           <Button size="sm" variant="ghost" onClick={() => openEdit(r)}>
             Edit
           </Button>
