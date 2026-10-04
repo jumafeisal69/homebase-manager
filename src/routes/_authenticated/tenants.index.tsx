@@ -33,6 +33,11 @@ const blank = {
   property_id: "",
   date_joined: today(),
   status: "active",
+  // Optional room assignment (only used when adding a new tenant)
+  room_id: "",
+  move_in_date: today(),
+  monthly_rent: "",
+  deposit: "",
 };
 
 const assignBlank = {
