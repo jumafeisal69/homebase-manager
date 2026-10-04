@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { useProperties, useRoomsList, useTenantsList } from "@/hooks/useLookups";
 import { logAudit, useRows, useSave } from "@/lib/db";
+import { createTenantAccount } from "@/lib/tenants.functions";
 import { formatDate, formatPhone, today } from "@/lib/format";
 import type { Assignment, Tenant } from "@/lib/types";
 
