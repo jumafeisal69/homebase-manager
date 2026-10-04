@@ -138,17 +138,52 @@ function TenantsPage() {
       toast.error("That email address doesn't look right.");
       return;
     }
+    const room = !editing && form.room_id ? rooms.find((r) => r.id === form.room_id) : undefined;
+    if (!editing && form.room_id && !room) {
+      toast.error("Choose a room for this tenant.");
+      return;
+    }
     const payload: Record<string, unknown> = {
-      ...form,
-      property_id: form.property_id || null,
-      date_of_birth: form.date_of_birth || null,
+      full_name: form.full_name,
+      phone: form.phone,
+      email: form.email,
+      national_id: form.national_id,
       gender: form.gender || null,
+      date_of_birth: form.date_of_birth || null,
+      emergency_contact: form.emergency_contact,
+      emergency_phone: form.emergency_phone,
+      address: form.address,
+      property_id: form.property_id || null,
+      date_joined: form.date_joined,
+      status: form.status,
       id: editing?.id,
     };
     saveTenant.mutate(payload, {
       onSuccess: (row) => {
+        const saved = row as Tenant | null;
+        void logAudit(editing ? "update" : "create", "tenant", `Tenant ${form.full_name}`, saved?.id);
+        if (room && saved?.id) {
+          const rent = Number(form.monthly_rent || room.monthly_rent);
+          saveAssignment.mutate(
+            {
+              tenant_id: saved.id,
+              property_id: room.property_id,
+              room_id: room.id,
+              move_in_date: form.move_in_date,
+              monthly_rent: rent,
+              deposit: Number(form.deposit || room.deposit_amount || 0),
+              is_active: true,
+            },
+            {
+              onSuccess: () => {
+                setOpen(false);
+                void logAudit("assign", "tenant_assignment", `Assigned room ${room.room_number}`, saved.id);
+              },
+            },
+          );
+          return;
+        }
         setOpen(false);
-        void logAudit(editing ? "update" : "create", "tenant", `Tenant ${form.full_name}`, (row as Tenant | null)?.id);
       },
     });
   }
