@@ -392,6 +392,47 @@ function TenantsPage() {
           <Field label="Home address" className="sm:col-span-2">
             <Textarea value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} rows={2} />
           </Field>
+          {!editing && (
+            <>
+              <div className="sm:col-span-2 border-t border-border pt-4 text-sm font-medium">Room assignment (optional)</div>
+              <Field label="Room" hint="Only rooms that aren't occupied are listed.">
+                <Select
+                  value={form.room_id}
+                  onValueChange={(v) => {
+                    const room = rooms.find((r) => r.id === v);
+                    setForm({
+                      ...form,
+                      room_id: v,
+                      monthly_rent: room ? String(room.monthly_rent) : form.monthly_rent,
+                      deposit: room ? String(room.deposit_amount) : form.deposit,
+                    });
+                  }}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="No room yet" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {rooms
+                      .filter((r) => (!form.property_id || r.property_id === form.property_id) && r.status !== "occupied")
+                      .map((r) => (
+                        <SelectItem key={r.id} value={r.id}>
+                          {r.buildings?.name} · {r.room_number}
+                        </SelectItem>
+                      ))}
+                  </SelectContent>
+                </Select>
+              </Field>
+              <Field label="Move-in date">
+                <Input type="date" value={form.move_in_date} onChange={(e) => setForm({ ...form, move_in_date: e.target.value })} />
+              </Field>
+              <Field label="Monthly rent (TZS)">
+                <Input type="number" min={0} value={form.monthly_rent} onChange={(e) => setForm({ ...form, monthly_rent: e.target.value })} />
+              </Field>
+              <Field label="Deposit (TZS)">
+                <Input type="number" min={0} value={form.deposit} onChange={(e) => setForm({ ...form, deposit: e.target.value })} />
+              </Field>
+            </>
+          )}
         </div>
       </FormDialog>
 
