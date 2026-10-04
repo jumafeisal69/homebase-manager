@@ -225,7 +225,14 @@ function TenantsPage() {
             </Button>
           )}
           {!r.user_id && (
-            <Button size="sm" variant="ghost" onClick={() => openLogin(r)}>
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={(e) => {
+                e.stopPropagation();
+                openLogin(r);
+              }}
+            >
               Create login
             </Button>
           )}
