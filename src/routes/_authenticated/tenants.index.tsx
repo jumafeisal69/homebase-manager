@@ -259,7 +259,7 @@ function TenantsPage() {
       header: "",
       className: "text-right",
       cell: (r) => (
-        <div className="flex flex-wrap justify-end gap-1">
+        <div className="flex flex-wrap justify-end gap-1" onClick={(e) => e.stopPropagation()}>
           <Button size="sm" variant="ghost" onClick={() => void navigate({ to: "/tenants/$tenantId", params: { tenantId: r.id } })}>
             Profile
           </Button>
@@ -269,14 +269,7 @@ function TenantsPage() {
             </Button>
           )}
           {!r.user_id && (
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={(e) => {
-                e.stopPropagation();
-                openLogin(r);
-              }}
-            >
+            <Button size="sm" variant="ghost" onClick={() => openLogin(r)}>
               Create login
             </Button>
           )}
