@@ -417,6 +417,26 @@ function TenantsPage() {
         </div>
       </FormDialog>
 
+      <FormDialog
+        open={Boolean(loginTenant)}
+        onOpenChange={(v) => !v && setLoginTenant(null)}
+        title={`Create login for ${loginTenant?.full_name ?? "tenant"}`}
+        description="The tenant uses this email and password to sign in to their portal. Share them privately."
+        onSubmit={() => void submitLogin()}
+        saving={loginSaving}
+        savingLabel="Creating login…"
+        submitLabel="Create login"
+      >
+        <div className="grid gap-4">
+          <Field label="Email">
+            <Input type="email" value={loginForm.email} onChange={(e) => setLoginForm({ ...loginForm, email: e.target.value })} placeholder="tenant@example.com" />
+          </Field>
+          <Field label="Password" hint="At least 8 characters. The tenant can change it after signing in.">
+            <Input type="text" value={loginForm.password} onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })} placeholder="Choose a password" />
+          </Field>
+        </div>
+      </FormDialog>
+
       <ConfirmDialog
         open={Boolean(archiving)}
         onOpenChange={(v) => !v && setArchiving(null)}
