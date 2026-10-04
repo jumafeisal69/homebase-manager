@@ -125,6 +125,10 @@ function TenantsPage() {
       property_id: row.property_id ?? "",
       date_joined: row.date_joined,
       status: row.status,
+      room_id: "",
+      move_in_date: today(),
+      monthly_rent: "",
+      deposit: "",
     });
     setOpen(true);
   }
